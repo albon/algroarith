@@ -9,7 +9,7 @@ using namespace std;
 
 struct avl_node
 {
-    avl_node():data(0), height(0), freq(1), left(NULL), right(NULL) {}
+    avl_node():data(0), height(1), freq(1), left(NULL), right(NULL) {}
     int data;
     int height;
     int freq;       // 表示相同的此结点有几个了
@@ -48,12 +48,12 @@ private:
         if(root->data > data)
         {
             deleteNode(root->left, data);
-            if(2==height(root->left)-height(root->right))
+            if(2==height(root->right)-height(root->left))
             {
-                if(data < root->left->data)
-                    root = SingRotateLeft(root);
+                if(root->right->left!=NULL&&(height(root->right->left)>height(root->right->right)) )
+                    root = DoubleRotateRL(root);
                 else
-                    root = DoubleRotateLR (root);
+                    root = SingRotateRight(root);
             }
         }
         else if(root->data < data)
@@ -61,10 +61,10 @@ private:
             deleteNode(root->right, data);
             if(2==height(root->left)-height(root->right))
             {
-                if(data > root->right->data)
-                    root = SingRotateRight(root);
+                if(root->left->right!=NULL&& (height(root->left->right)>height(root->left->left) ))
+                    root = DoubleRotateLR(root);
                 else
-                    root = DoubleRotateRL(root);
+                    root = SingRotateLeft(root);
             }
         }
         else // 若相等，则删除此结点
@@ -185,7 +185,6 @@ private:
         if(!root)
             return 0;
         return root->height;
-        //return Max(height(root->left), height(root->right)) + 1;
     }
 
     void inOrderTraverse(avl_node* root)
@@ -202,11 +201,13 @@ private:
 int main()
 {
     avl_tree tree;
+    cout<<"insert: "<<endl;
     for(int i=0; i<10; ++i)
     {
         tree.insertData(rand()%10);
         tree.traverse();
     }
+    cout<<"delete: "<<endl;
     for(int i=0; i<10; ++i)
     {
         tree.deleteData(rand()%10);
