@@ -31,7 +31,7 @@ public:
     }
     void traverse()            //  遍历
     {
-        cout<<"avl "<<root->height<<": ";
+        cout<<"root "<<root->data<<": ";
         inOrderTraverse(root);
         cout<<endl;
     }
@@ -42,7 +42,7 @@ public:
 private:
     avl_node* root;
     void deleteNode(avl_node* &root, int data)
-    {
+    {// 递归删除，递归调整
         if(root == NULL)
             return;
         if(root->data > data)
@@ -87,7 +87,7 @@ private:
                 }
             }
             else
-            {
+            {// 没有2个子结点，则直接删除即可
                 avl_node* tmp = root;
                 if(root->left)
                     root = root->left;
@@ -102,7 +102,7 @@ private:
             root->height = Max(height(root->left), height(root->right)) + 1;
     }
     void insertNode(avl_node* &root, int data)
-    {
+    {// 递归插入，递归的调整
         if(root == NULL)
         {
             root = new avl_node;
@@ -123,7 +123,7 @@ private:
         else if(root->data < data)
         {
             insertNode(root->right, data);
-            if(2==height(root->left)-height(root->right))
+            if(2==height(root->right)-height(root->left))
             {
                 if(data > root->right->data)
                     root = SingRotateRight(root);
@@ -133,7 +133,7 @@ private:
         }
         else
             root->freq++;
-
+        // 更新高度
         root->height = Max(height(root->left), height(root->right)) + 1;
     }
 
