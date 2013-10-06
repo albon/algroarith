@@ -29,7 +29,11 @@ void kmp_match(char* text, char *p, int *next)
     q = s = 0;
 
     while(s < n)
-    {// p[q]!=text[s]时，令q=next[q]再比较
+    {
+        // p[q]==text[s]，则q++,s++
+        // p[q]!=text[s]时，令q=next[q]再比较
+        // next[q]的含义是，当p[q]!=text[s]时，再用p[next[q]]与text[s]比较
+        // 直到q==0了，表示p[0]与text[s]都不一样，那就s++
         for(q=next[q]; q<m && s<n && p[q]==text[s]; q++, s++);
         if(q == 0)
         {
@@ -47,7 +51,7 @@ void kmp_match(char* text, char *p, int *next)
 int main()
 {
     int next[101], n;
-    char *p = "abacc";
+    char *p = "ababc";
     char *text = "ababccccababc";
 
     compute_prefix(next, p);
