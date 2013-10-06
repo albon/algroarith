@@ -37,8 +37,8 @@ void kmp_match(char* text, char *p, int *next)
         }
         else if(q==m)
         {
-            q = 0;
             cout<<"pattern occurs with shift"<< s-m<<endl;
+            return; //find and return
         }
 
     }
